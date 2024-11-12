@@ -14,7 +14,7 @@ public class Player : Character
     private bool isGrounded = true;
     private bool isJumping = false;
     private bool isAttack = false;
-
+    
     private bool isDeath = false;
 
     private float horizontal;
@@ -107,9 +107,8 @@ public class Player : Character
         base.OnInit();
         isAttack = false;
 
-        SavePoint();
-
         transform.position = savePoint;
+        SavePoint();
         ChangeAnim("Idle");
         ActiveAttackFalse();
         UIManager.instance.SetCoint(coin);
