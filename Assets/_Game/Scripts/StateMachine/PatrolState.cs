@@ -15,7 +15,7 @@ public class PatrolState : IState
 
     public void OnExecute(Enemy enemy)
     {
-        Debug.Log("Patrol");
+        //Debug.Log("Patrol");
         timer += Time.deltaTime;
 
         if (enemy.Target != null)

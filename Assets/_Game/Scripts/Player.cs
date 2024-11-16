@@ -11,10 +11,20 @@ public class Player : Character
 
     [SerializeField] private GameObject attackArea;
 
+    [Header("Dash")]
+    [SerializeField] private CloneDashPlayer spriteDashPrefabs;
+    [SerializeField] private float dashTimer;
+    [SerializeField] private float timerSpawnSpriteDashCoundown;
+    [SerializeField] private float dashCoundown;
+    [SerializeField] private float dashSpeed;
+    private float lastTimeDash;
+    private float lastTimeSpawnSpriteDash;
+
     private bool isGrounded = true;
     private bool isJumping = false;
     private bool isAttack = false;
-    
+    private bool isDash = false;
+
     private bool isDeath = false;
 
     private float horizontal;
@@ -26,18 +36,34 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
-        coin = PlayerPrefs.GetInt("Coin",coin);
+        coin = PlayerPrefs.GetInt("Coin", coin);
         UIManager.instance.SetCoint(coin);
     }
 
     //private void FixedUpdate()
     void Update()
     {
+        lastTimeDash -= Time.deltaTime;
+        isGrounded = CheckGrounded();
+
         if (IsDeath)
             return;
 
-        isGrounded = CheckGrounded();
-        //horizontal = Input.GetAxisRaw("Horizontal");
+        if (isDash)
+        {
+            rb.velocity = new Vector2(dashSpeed * (transform.rotation.y == 0 ? 1 : -1), rb.velocity.y);
+            SpawnSpriteDash();
+            //Debug.Log(dashSpeed * (transform.rotation.y == 0 ? 1 : -1));
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDash)
+            Dash();
+
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+            horizontal = Input.GetAxisRaw("Horizontal");
+        else if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+            horizontal = 0;
 
         //if (isAttack)
         //{
@@ -45,6 +71,11 @@ public class Player : Character
         //    return;
         //}
 
+        CheckAction();
+    }
+
+    private void CheckAction()
+    {
         if (isGrounded)
         {
             //jump
@@ -98,7 +129,6 @@ public class Player : Character
         else if (isGrounded && !isJumping)
         {
             ChangeAnim("Idle");
-            rb.velocity = Vector2.zero;
         }
     }
 
@@ -106,12 +136,14 @@ public class Player : Character
     {
         base.OnInit();
         isAttack = false;
+        lastTimeDash = dashCoundown;
 
         transform.position = savePoint;
         SavePoint();
         ChangeAnim("Idle");
         ActiveAttackFalse();
         UIManager.instance.SetCoint(coin);
+        UIManager.instance.SetCooldownOfDash();
     }
 
     public override void OnDesPawn()
@@ -132,6 +164,8 @@ public class Player : Character
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1.15f, groundLayer);
         return hit.collider != null;
     }
+
+    #region Action
     public void Attack()
     {
         isAttack = true;
@@ -151,6 +185,8 @@ public class Player : Character
     }
     public void Jump()
     {
+        if (!isGrounded)
+            return;
         isJumping = true;
         ChangeAnim("Jump");
         rb.AddForce(jumpForce * Vector2.up);
@@ -161,10 +197,57 @@ public class Player : Character
         ChangeAnim("Idle");
         isAttack = false;
     }
+    #endregion
+
+    #region Dash
+    public void Dash()
+    {
+        if (!CanDashCoundown())
+            return;
+
+        UIManager.instance.SetCooldownOfDash();
+        isDash = true;
+        //anim.SetBool("Dash", isDash);
+        //ChangeAnim("Dash");
+
+        Invoke(nameof(DashEnd), dashTimer);
+    }
+
+    public void DashEnd()
+    {
+        //Debug.Log("End Dash");
+        isDash = false;
+        //anim.SetBool("Dash", isDash);
+        rb.velocity = Vector2.zero;
+        lastTimeDash = dashCoundown;
+        //ChangeAnim("Idle");
+    }
+
+    public bool CanDashCoundown()
+    {
+        //if (Time.time >= lastTimeDash + dashCoundown)
+        if (lastTimeDash <= 0)
+            return true;
+
+        return false;
+    }
+
+    public void SpawnSpriteDash()
+    {
+        if (Time.time >= lastTimeSpawnSpriteDash + timerSpawnSpriteDashCoundown)
+        {
+            CloneDashPlayer clone = Instantiate(spriteDashPrefabs, transform.position, transform.rotation);
+            clone.SetSprite(this.sr);
+            // Debug.Log("Spawn Sprite Dash");
+            lastTimeSpawnSpriteDash = Time.time;
+        }
+    }
+
+    #endregion
 
     public void ActiveAttackTrue() => attackArea.SetActive(true);
 
-    public void ActiveAttackFalse()=>attackArea.SetActive(false);
+    public void ActiveAttackFalse() => attackArea.SetActive(false);
 
     public void SetMove(float horizontal)
     {
@@ -188,8 +271,11 @@ public class Player : Character
         }
     }
 
-    internal void SavePoint()
+    internal void SavePoint() => savePoint = transform.position;
+
+    public void SetZeroVelocity() => rb.velocity = Vector2.zero;
+    public float GetDashCoundown()
     {
-        savePoint = transform.position;
+        return dashCoundown;
     }
 }

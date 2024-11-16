@@ -16,7 +16,7 @@ public class Idle_State : IState
     {
         timer += Time.deltaTime;
 
-        Debug.Log("Idle");
+        //Debug.Log("Idle");
 
         if (timer > randomTime)
         {

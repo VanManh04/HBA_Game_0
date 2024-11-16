@@ -3,13 +3,15 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     protected Rigidbody2D rb;
-    private Animator anim;
+    protected Animator anim;
+    protected SpriteRenderer sr;
 
     [SerializeField] protected HealthBar healthBar;
     [SerializeField] protected CombatText combatTextPrefabs;
 
     private float hp;
     private string currentAnimName;
+    private bool IsNoDamage;
 
     protected bool IsDeath => hp <= 0;
 
@@ -17,6 +19,7 @@ public class Character : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         OnInit();
     }
 
@@ -24,7 +27,7 @@ public class Character : MonoBehaviour
     public virtual void OnInit()
     {
         hp = 100;
-        healthBar.OnInit(100,transform);
+        healthBar.OnInit(100, transform);
     }
 
     public virtual void OnDesPawn()
@@ -62,7 +65,9 @@ public class Character : MonoBehaviour
             }
 
             healthBar.SetNewHp(hp);
-            Instantiate(combatTextPrefabs,transform.position+Vector3.up,Quaternion.identity).OnInit(damage);
+            Instantiate(combatTextPrefabs, transform.position + Vector3.up, Quaternion.identity).OnInit(damage);
         }
     }
+
+    public void SetIsNoDamage(bool _bool) => this.IsNoDamage = _bool;
 }
