@@ -204,4 +204,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hit_VFX: {fileID: 2869635181201005247, guid: 4cc8508dced74404db4d5364f2ced3bb, type: 3}
-  speedMove: 5
+  speedMove: 10

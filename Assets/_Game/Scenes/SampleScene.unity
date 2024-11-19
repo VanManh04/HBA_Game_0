@@ -150,7 +150,7 @@ Transform:
   m_GameObject: {fileID: 53508780}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.254, y: -0.321, z: 0}
+  m_LocalPosition: {x: 1.4729999, y: -0.321, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -627,7 +627,7 @@ Transform:
   m_GameObject: {fileID: 328235547}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.005, y: 0.004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -652,7 +652,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 5
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 314b845556e65e64487fb8390a3c7839, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -695,8 +695,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.25, y: -0.09466541}
-  m_Size: {x: 0.76, y: 1.9514368}
+  m_Offset: {x: -0.00545761, y: -0.09466541}
+  m_Size: {x: 0.75999993, y: 1.9514368}
   m_Direction: 0
 --- !u!114 &328235551
 MonoBehaviour:
@@ -719,11 +719,12 @@ MonoBehaviour:
   jumpForce: 1000
   kunaiPrefabs: {fileID: 9106439505782708322, guid: 90c19734e1450a748a6c862816492f01, type: 3}
   throwPoint: {fileID: 786681623}
+  throwCoundown: 5
   attackArea: {fileID: 53508780}
   spriteDashPrefabs: {fileID: 6699238550214668072, guid: 87673562241a29a488e2e8b30ffb7d50, type: 3}
   dashTimer: 0.2
   timerSpawnSpriteDashCoundown: 0.01
-  dashCoundown: 3
+  dashCoundown: 2
   dashSpeed: 20
   coin: 0
 --- !u!1001 &332768756
@@ -3797,7 +3798,7 @@ Transform:
   m_GameObject: {fileID: 786681622}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.895, y: -0.282, z: 0}
+  m_LocalPosition: {x: 1.114, y: -0.282, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5209,6 +5210,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1525801129}
+  - {fileID: 1901644300}
   m_Father: {fileID: 1475197688}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -9579,7 +9581,7 @@ Transform:
   m_GameObject: {fileID: 1536044944}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.242, y: 0, z: 0}
+  m_LocalPosition: {x: -0.023, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10438,6 +10440,81 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f87de6bd871a5046bb2aaf3cafd2353, type: 3}
+--- !u!1 &1901644299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1901644300}
+  - component: {fileID: 1901644301}
+  - component: {fileID: 1901644302}
+  m_Layer: 5
+  m_Name: Coundown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1901644300
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901644299}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1182501827}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1901644301
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901644299}
+  m_CullTransparentMesh: 1
+--- !u!114 &1901644302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901644299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.92941177}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: ce40876df385a764eacc854aa6a2836d, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1906863710
 GameObject:
   m_ObjectHideFlags: 0
@@ -10957,7 +11034,7 @@ GameObject:
   - component: {fileID: 2080525606}
   - component: {fileID: 2080525607}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Coundown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11003,8 +11080,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.79607844}
-  m_RaycastTarget: 0
+  m_Color: {r: 0, g: 0, b: 0, a: 0.92941177}
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -11265,8 +11342,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db738080886053f4da94718844252976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashImage: {fileID: 2080525607}
   player: {fileID: 328235551}
+  dashImage: {fileID: 2080525607}
+  throwImage: {fileID: 1901644302}
   textCoint: {fileID: 1502010958}
 --- !u!1 &2136914207
 GameObject:

@@ -6,8 +6,11 @@ public class Player : Character
     [SerializeField] private float speed;
     [SerializeField] private float jumpForce = 35;
 
+    [Header("Throw")]
     [SerializeField] private Kunai kunaiPrefabs;
     [SerializeField] private Transform throwPoint;
+    [SerializeField] private float throwCoundown;
+    private float lastTimeThrow;
 
     [SerializeField] private GameObject attackArea;
 
@@ -43,6 +46,7 @@ public class Player : Character
     //private void FixedUpdate()
     void Update()
     {
+        lastTimeThrow -= Time.deltaTime;
         lastTimeDash -= Time.deltaTime;
         isGrounded = CheckGrounded();
 
@@ -92,7 +96,8 @@ public class Player : Character
             //changeAnim Run
             if (Mathf.Abs(horizontal) > .1f)
             {
-                ChangeAnim("Run");
+                if (!isAttack)
+                    ChangeAnim("Run");
             }
             //attack
             if (Input.GetKeyDown(KeyCode.C) && isGrounded)
@@ -135,6 +140,8 @@ public class Player : Character
     public override void OnInit()
     {
         base.OnInit();
+        SetZeroVelocity();
+        horizontal = 0;
         isAttack = false;
         lastTimeDash = dashCoundown;
 
@@ -144,6 +151,7 @@ public class Player : Character
         ActiveAttackFalse();
         UIManager.instance.SetCoint(coin);
         UIManager.instance.SetCooldownOfDash();
+        UIManager.instance.SetCooldownOfThrow();
     }
 
     public override void OnDesPawn()
@@ -168,20 +176,27 @@ public class Player : Character
     #region Action
     public void Attack()
     {
+        if (isAttack)
+            return;
+
         isAttack = true;
         ChangeAnim("Attack");
         Invoke(nameof(ResetAttack), .5f);
         ActiveAttackTrue();
         Invoke(nameof(ActiveAttackFalse), .5f);
-
     }
     public void Throw()
     {
+        if (lastTimeThrow >= 0)
+            return;
+
+        UIManager.instance.SetCooldownOfThrow();
         isAttack = true;
         ChangeAnim("Throw");
         Invoke(nameof(ResetAttack), .5f);
 
         Instantiate(kunaiPrefabs, throwPoint.position, throwPoint.rotation);
+        lastTimeThrow = throwCoundown;
     }
     public void Jump()
     {
@@ -202,7 +217,7 @@ public class Player : Character
     #region Dash
     public void Dash()
     {
-        if (!CanDashCoundown())
+        if (lastTimeDash >= 0)
             return;
 
         UIManager.instance.SetCooldownOfDash();
@@ -221,15 +236,6 @@ public class Player : Character
         rb.velocity = Vector2.zero;
         lastTimeDash = dashCoundown;
         //ChangeAnim("Idle");
-    }
-
-    public bool CanDashCoundown()
-    {
-        //if (Time.time >= lastTimeDash + dashCoundown)
-        if (lastTimeDash <= 0)
-            return true;
-
-        return false;
     }
 
     public void SpawnSpriteDash()
@@ -277,5 +283,10 @@ public class Player : Character
     public float GetDashCoundown()
     {
         return dashCoundown;
+    }
+
+    public float GetThrowCoundown()
+    {
+        return throwCoundown;
     }
 }
