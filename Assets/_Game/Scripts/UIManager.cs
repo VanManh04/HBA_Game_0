@@ -12,6 +12,9 @@ public class UIManager : MonoBehaviour
     [Header("Coundown Throw")]
     [SerializeField] private Image throwImage;
 
+    [Header("Coundown BlackHole")]
+    [SerializeField] private Image BlackHoleImage;
+
     [SerializeField] TextMeshProUGUI textCoint;
 
     private void Awake()
@@ -27,6 +30,9 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
             SetCooldownOf(throwImage);
         CheckCooldownOf(throwImage, player.GetThrowCoundown());
+        if (Input.GetKeyDown(KeyCode.R))
+            SetCooldownOf(BlackHoleImage);
+        CheckCooldownOf(BlackHoleImage, player.GetBlackHoleCoundown());
     }
 
     private void CheckCooldownOf(Image _image, float _cooldown)
@@ -40,8 +46,9 @@ public class UIManager : MonoBehaviour
         if (_image.fillAmount <= 0)
             _image.fillAmount = 1;
     }
-    public void SetCoint(float coin)=>textCoint.text = coin.ToString();
+    public void SetCoint(float coin) => textCoint.text = coin.ToString();
 
-    public void SetCooldownOfDash()=> SetCooldownOf(dashImage);
-    public void SetCooldownOfThrow()=> SetCooldownOf(throwImage);
+    public void SetCooldownOfDash() => SetCooldownOf(dashImage);
+    public void SetCooldownOfThrow() => SetCooldownOf(throwImage);
+    public void SetCooldownOfBlackHole() => SetCooldownOf(BlackHoleImage);
 }

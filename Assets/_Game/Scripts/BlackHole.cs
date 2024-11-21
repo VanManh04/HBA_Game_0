@@ -17,6 +17,8 @@ public class BlackHole : MonoBehaviour
     [SerializeField] private CloneAttack[] cloneAttackPrefabs;
     [SerializeField] private float spawnCloneAttackCoundown;
     [SerializeField] private float countCloneAttack;
+    [SerializeField] private bool isRandomColor;
+    [SerializeField] private Color[] colors;
     private float timerSpawnCloneAttack;
     private Enemy target;
 
@@ -61,6 +63,8 @@ public class BlackHole : MonoBehaviour
         countCloneAttack--;
         timerSpawnCloneAttack = spawnCloneAttackCoundown;
         CloneAttack cloneAttack = Instantiate(cloneAttackPrefabs[Random.Range(0,cloneAttackPrefabs.Length)], target.transform.position, Quaternion.identity);
+        if(colors.Length > 0&&isRandomColor)
+            cloneAttack.Set_Sr(colors[Random.Range(0,colors.Length)]);  
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

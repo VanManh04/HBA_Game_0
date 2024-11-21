@@ -167,6 +167,7 @@ public class Player : Character
         horizontal = 0;
         isAttack = false;
         lastTimeDash = dashCoundown;
+        lastTimeBlackHole = blackHoleCoundown;
         lasttimeFly = timerFly;
 
         transform.position = savePoint;
@@ -176,6 +177,7 @@ public class Player : Character
         UIManager.instance.SetCoint(coin);
         UIManager.instance.SetCooldownOfDash();
         UIManager.instance.SetCooldownOfThrow();
+        UIManager.instance.SetCooldownOfBlackHole();
     }
 
     public override void OnDesPawn()
@@ -257,6 +259,7 @@ public class Player : Character
         }
         else
             rb.velocity = Vector2.zero;
+
     }
     public void SetEndBlackHole()
     {
@@ -266,6 +269,7 @@ public class Player : Character
         isBlackHole = false;
         canSpawnBlackHole = true;
         ChangeAnim("Idle");
+        UIManager.instance.SetCooldownOfBlackHole();
     }
 
     private void ResetAttack()
@@ -349,4 +353,10 @@ public class Player : Character
     {
         return throwCoundown;
     }
+
+    public float GetBlackHoleCoundown()
+    {
+        return blackHoleCoundown;
+    }
+
 }

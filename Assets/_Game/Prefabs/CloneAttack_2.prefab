@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttackZone: {fileID: 7464901179422885149}
+  hit_VFX: {fileID: 2869635181201005247, guid: 4cc8508dced74404db4d5364f2ced3bb, type: 3}
 --- !u!1 &5899359645891455293
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22335c510ac04c54c8d70bbc60cc3cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
+  damage: 3
 --- !u!1 &7502380090583973196
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,3 +295,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 4981429319705033069}
+  sr: {fileID: 5619707752684031746}
