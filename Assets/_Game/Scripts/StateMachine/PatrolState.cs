@@ -10,25 +10,23 @@ public class PatrolState : IState
         timer = 0;
         randomTime = Random.Range(3f, 6f);
 
-        enemy.StopMoving();
+        //enemy.StopMoving();
     }
 
     public void OnExecute(Enemy enemy)
     {
-        //Debug.Log("Patrol");
+        Debug.Log("Patrol");
         timer += Time.deltaTime;
 
         if (enemy.Target != null)
         {
             enemy.changeDirection(enemy.Target.transform.position.x > enemy.transform.position.x);
-
-                Debug.Log(enemy.IsTargetRange());
+            //Debug.Log(enemy.IsTargetRange());
             if (enemy.IsTargetRange())
-            {
                 enemy.ChangeState(new Attack_State());
-            }
             else
                 enemy.Moving();
+
         }
         else
         {
@@ -37,10 +35,6 @@ public class PatrolState : IState
             else
                 enemy.ChangeState(new Idle_State());
         }
-
-
-
-
     }
 
     public void OnExit(Enemy enemy)

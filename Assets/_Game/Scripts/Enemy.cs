@@ -4,6 +4,7 @@ public class Enemy : Character
 {
     [SerializeField] private float attackRange;
     [SerializeField] private float moveSpeed;
+    private float moveSpeedDefault;
 
     [SerializeField] private GameObject attackArea;
 
@@ -16,10 +17,14 @@ public class Enemy : Character
     protected override void Start()
     {
         base.Start();
+        moveSpeedDefault = moveSpeed;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+        if (stun)
+            return;
         if (currentState != null && !IsDeath)
             currentState.OnExecute(this);
     }
@@ -113,5 +118,11 @@ public class Enemy : Character
             ChangeState(new PatrolState());
         else
             ChangeState(new Idle_State());
+    }
+
+    public override void Stun(bool _bool)
+    {
+        base.Stun(_bool);
+        moveSpeed = _bool ? 0 : moveSpeedDefault;
     }
 }

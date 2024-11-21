@@ -12,6 +12,7 @@ public class Character : MonoBehaviour
     private float hp;
     private string currentAnimName;
     private bool IsNoDamage;
+    protected bool stun;
 
     protected bool IsDeath => hp <= 0;
 
@@ -21,6 +22,11 @@ public class Character : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         sr = GetComponentInChildren<SpriteRenderer>();
         OnInit();
+    }
+
+    protected virtual void Update()
+    {
+        
     }
 
 
@@ -52,9 +58,11 @@ public class Character : MonoBehaviour
         }
     }
 
-
     public void OnHit(float damage)
     {
+        if (IsNoDamage)
+            return;
+
         if (!IsDeath)
         {
             hp -= damage;
@@ -70,4 +78,14 @@ public class Character : MonoBehaviour
     }
 
     public void SetIsNoDamage(bool _bool) => this.IsNoDamage = _bool;
+
+    public void SetZeroVelocity() => rb.velocity = Vector2.zero;
+
+    public virtual void Stun(bool _bool)
+    {
+        stun = _bool;
+        anim.speed = _bool ? 0 : 1;
+    }
+
+    public void SetVelocity(Vector2 _velocity) => rb.velocity = _velocity;
 }

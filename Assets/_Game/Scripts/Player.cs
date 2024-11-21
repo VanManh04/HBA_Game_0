@@ -23,16 +23,27 @@ public class Player : Character
     private float lastTimeDash;
     private float lastTimeSpawnSpriteDash;
 
+    [Header("BlackHole")]
+    [SerializeField] private GameObject blackHolePrefabs;
+    [SerializeField] private float blackHoleCoundown;
+    [SerializeField] private float speedFly;
+    [SerializeField] private float timerFly;
+    private float lasttimeFly;
+    private float lastTimeBlackHole;
+
+
+
     private bool isGrounded = true;
     private bool isJumping = false;
     private bool isAttack = false;
     private bool isDash = false;
-
-    private bool isDeath = false;
+    private bool isBlackHole = false;
+    private bool canSpawnBlackHole = true;
 
     private float horizontal;
 
 
+    [Header("Other")]
     [SerializeField] private int coin = 0;
 
     private Vector3 savePoint;
@@ -44,14 +55,25 @@ public class Player : Character
     }
 
     //private void FixedUpdate()
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
+        SetIsNoDamage(isDash);
         lastTimeThrow -= Time.deltaTime;
         lastTimeDash -= Time.deltaTime;
+        lastTimeBlackHole -= Time.deltaTime;
+
         isGrounded = CheckGrounded();
 
         if (IsDeath)
             return;
+
+        if (isBlackHole)
+        {
+            BlackHole();
+            return;
+        }
 
         if (isDash)
         {
@@ -63,7 +85,8 @@ public class Player : Character
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && !isDash)
             Dash();
-
+        if (Input.GetKeyDown(KeyCode.R))
+            CheckBlackHole();
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
             horizontal = Input.GetAxisRaw("Horizontal");
         else if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
@@ -144,6 +167,7 @@ public class Player : Character
         horizontal = 0;
         isAttack = false;
         lastTimeDash = dashCoundown;
+        lasttimeFly = timerFly;
 
         transform.position = savePoint;
         SavePoint();
@@ -163,6 +187,7 @@ public class Player : Character
     protected override void OnDeath()
     {
         base.OnDeath();
+        SetZeroVelocity();
     }
 
     private bool CheckGrounded()
@@ -205,6 +230,42 @@ public class Player : Character
         isJumping = true;
         ChangeAnim("Jump");
         rb.AddForce(jumpForce * Vector2.up);
+    }
+
+    public void CheckBlackHole()
+    {
+        if (lastTimeBlackHole > 0)
+            return;
+        isBlackHole = true;
+        horizontal = 0;
+    }
+
+    public void BlackHole()
+    {
+        ChangeAnim("BlackHole");
+
+        lasttimeFly -= Time.deltaTime;
+        if (lasttimeFly > 0)
+            rb.velocity = new Vector2(0, speedFly);
+        else if (canSpawnBlackHole)
+        {
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 0;
+            canSpawnBlackHole = false;
+            BlackHole blackHole = Instantiate(blackHolePrefabs, transform.position, Quaternion.identity).GetComponent<BlackHole>();
+            blackHole.SetUp(this);
+        }
+        else
+            rb.velocity = Vector2.zero;
+    }
+    public void SetEndBlackHole()
+    {
+        rb.gravityScale = 5;
+        lasttimeFly = timerFly;
+        lastTimeBlackHole = blackHoleCoundown;
+        isBlackHole = false;
+        canSpawnBlackHole = true;
+        ChangeAnim("Idle");
     }
 
     private void ResetAttack()
@@ -279,7 +340,6 @@ public class Player : Character
 
     internal void SavePoint() => savePoint = transform.position;
 
-    public void SetZeroVelocity() => rb.velocity = Vector2.zero;
     public float GetDashCoundown()
     {
         return dashCoundown;
